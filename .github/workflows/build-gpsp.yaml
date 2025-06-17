@@ -1,34 +1,28 @@
-name: build-gpsp-arm
+name: build-arm64-gpsp
 
 on:
-  workflow_dispatch:   # manual trigger; change to "push:" if you want auto-builds
+  workflow_dispatch:
 
 jobs:
-  build:
+  arm64:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        target: [linux-armv7] # , linux-armv8]   # 32-bit + 64-bit
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Install cross toolchain
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install aarch64 toolchain
         run: |
           sudo apt-get update
-          if [[ "${{ matrix.target }}" == "linux-armv7" ]]; then
-            sudo apt-get install -y gcc-arm-linux-gnueabihf
-            echo "CC=arm-linux-gnueabihf-gcc" >> $GITHUB_ENV
-          else
-            sudo apt-get install -y gcc-aarch64-linux-gnu
-            echo "CC=aarch64-linux-gnu-gcc" >> $GITHUB_ENV
-          fi
+          sudo apt-get install -y gcc-aarch64-linux-gnu
 
-      - name: Build gpSP
-        # run: make -f Makefile.libretro platform=${{ matrix.target }} -j$(nproc)
-        run: make -f Makefile.common platform=${{ matrix.target }} -j$(nproc)
+      - name: Build gpSP core (arm64)
+        run: |
+          export CC=aarch64-linux-gnu-gcc
+          make platform=arm64 -j$(nproc)
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4   # v4 = current stable :contentReference[oaicite:1]{index=1}
+        uses: actions/upload-artifact@v4
         with:
-          name: gpsp_${{ matrix.target }}
+          name: gpsp_core_arm64
           path: gpsp_libretro.so
