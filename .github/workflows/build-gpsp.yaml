@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: [linux-armv7]#, linux-armv8]   # 32-bit + 64-bit
+        target: [linux-armv7] # , linux-armv8]   # 32-bit + 64-bit
     steps:
       - uses: actions/checkout@v4
 
