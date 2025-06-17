@@ -17,8 +17,10 @@ jobs:
           sudo apt-get update
           if [[ "${{ matrix.target }}" == "linux-armv7" ]]; then
             sudo apt-get install -y gcc-arm-linux-gnueabihf
+            echo "CC=arm-linux-gnueabihf-gcc" >> $GITHUB_ENV
           else
             sudo apt-get install -y gcc-aarch64-linux-gnu
+            echo "CC=aarch64-linux-gnu-gcc" >> $GITHUB_ENV
           fi
 
       - name: Build gpSP
