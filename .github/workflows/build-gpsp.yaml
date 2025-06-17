@@ -19,6 +19,8 @@ jobs:
       - name: Build gpSP core (arm64)
         run: |
           export CC=aarch64-linux-gnu-gcc
+          export CXX=aarch64-linux-gnu-g++
+          export AR=aarch64-linux-gnu-ar
           make platform=arm64 -j$(nproc)
 
       - name: Upload artifact
